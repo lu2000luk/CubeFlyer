@@ -28,6 +28,15 @@ var createScene = function () {
 	// Add a ground and ceiling object
 	var ground = BABYLON.MeshBuilder.CreateBox("ground", { width: 100, depth: 6, height: 1 }, scene);
 	var ceiling = BABYLON.MeshBuilder.CreateBox("ceiling", { width: 100, depth: 6, height: 1 }, scene);
+	var groundMaterial = new BABYLON.StandardMaterial("groundMaterial", scene);
+	groundMaterial.diffuseTexture = new BABYLON.Texture("./img/lava.jpg", scene);
+	groundMaterial.diffuseTexture.uScale = 1; // Set the scale of the texture on the x-axis to 1
+	groundMaterial.diffuseTexture.vScale = 0; // Set the scale of the texture on the y-axis to 0, effectively disabling vertical tiling
+	groundMaterial.diffuseTexture.uOffset = 0; // Set the offset of the texture on the x-axis to 0
+	groundMaterial.diffuseTexture.vOffset = 0; // Set the offset of the texture on the y-axis to 0
+	groundMaterial.diffuseTexture.wrapU = BABYLON.Texture.WRAP_ADDRESSMODE; // Set the wrap mode of the texture on the x-axis to WRAP_ADDRESSMODE, enabling horizontal tiling
+	groundMaterial.diffuseTexture.wrapV = BABYLON.Texture.CLAMP_ADDRESSMODE; // Set the wrap mode of the texture on the y-axis to CLAMP_ADDRESSMODE, disabling vertical tiling
+	//ground.material = groundMaterial;
 	ground.position.y = -gameHeight - 0.5; // +/- 0.5 to account for height of the cubes
 	ceiling.position.y = gameHeight + 0.5;
 

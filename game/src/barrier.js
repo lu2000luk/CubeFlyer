@@ -20,10 +20,12 @@ class Barrier extends GameObject {
 		this.floorBox = BABYLON.MeshBuilder.CreateBox("floorObstacle", boxOptions, scene);
 		// Materials impact how an object is rendered like color, texture etc.
 		let barrierMaterial = new BABYLON.StandardMaterial("Barrier Material", scene);
-		barrierMaterial.diffuseColor = BABYLON.Color3.Green();
+		barrierMaterial.diffuseColor = BABYLON.Color3.Red(); // Change color to red
 		this.ceilingBox.material = barrierMaterial;
 		this.floorBox.material = barrierMaterial;
 		this.assignLocations();
+
+		this.startFlashingEffect(); // Start the flashing effect
 	}
 
 	onDestroy() {
@@ -65,6 +67,30 @@ class Barrier extends GameObject {
 			}
 		}
 		return false;
+	}
+
+	startFlashingEffect() {
+		const animation = new BABYLON.Animation(
+			"flashAnimation",
+			"visibility",
+			30,
+			BABYLON.Animation.ANIMATIONTYPE_FLOAT,
+			BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE
+		);
+	
+		const keys = [
+			{ frame: 0, value: 1 },
+			{ frame: 15, value: 0 },
+			{ frame: 30, value: 1 }
+		];
+	
+		animation.setKeys(keys);
+	
+		this.ceilingBox.animations = [animation];
+		this.floorBox.animations = [animation];
+	
+		scene.beginAnimation(this.ceilingBox, 0, 30, true);
+		scene.beginAnimation(this.floorBox, 0, 30, true);
 	}
 }
 
