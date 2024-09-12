@@ -33,3 +33,5 @@ var addScore = function (points) {
 	score += points;
 	updateScoreText();
 };
+
+export { createHud, resetScore, addScore };

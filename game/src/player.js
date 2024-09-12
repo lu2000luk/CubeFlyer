@@ -1,4 +1,13 @@
 var gamepadManager = new BABYLON.GamepadManager();
+import { getAllObstacles, addObstacle, removeObstacle } from './game.js';
+import { GameObject } from './game-object.js';
+import { scene } from './game.js';
+import { createObject, destroyObject, destroyMatchingObjects, testMatchingObjects } from './state-manager.js';
+import { Barrier } from './barrier.js';
+import { gravity, flightForce } from './constants.js';
+import { gameHeight } from './scene.js';
+import { mainMenu } from './mainmenu.js';
+import { addScore, resetScore } from './hud.js';
 
 var deviceSourceManager;
 
@@ -8,9 +17,10 @@ class Player extends GameObject {
 	constructor() {
 		super();
 		this.trailMeshes = [];
-        this.trailLength = 10; // Adjust the length of the trail as needed
-        this.trailInterval = 0.1; // Time interval between trail segments
-        this.trailTimer = 0;
+		this.trailLength = 10; // Adjust the length of the trail as needed
+		this.trailInterval = 0.1; // Time interval between trail segments
+		this.trailTimer = 0;
+		this.passedObstacles = new Set();
 	}
 
 	init() {
@@ -20,10 +30,10 @@ class Player extends GameObject {
 		this.setupInputs();
 
 		const cylinderOptions = { diameterTop: 0, diameterBottom: 1, height: 1, tessellation: 24 };
-        this.playerMesh = BABYLON.MeshBuilder.CreateCylinder("arrow", cylinderOptions, scene);
-        this.playerMaterial = new BABYLON.StandardMaterial("Player Material", scene);
-        this.playerMesh.material = this.playerMaterial;
-        this.playerMesh.material.diffuseColor = BABYLON.Color3.White();
+		this.playerMesh = BABYLON.MeshBuilder.CreateCylinder("arrow", cylinderOptions, scene);
+		this.playerMaterial = new BABYLON.StandardMaterial("Player Material", scene);
+		this.playerMesh.material = this.playerMaterial;
+		this.playerMesh.material.diffuseColor = BABYLON.Color3.White();
 	}
 
 	onDestroy() {
@@ -52,8 +62,30 @@ class Player extends GameObject {
 		if (this.obstacleSpawnTimer <= 0) {
 			this.obstacleSpawnTimer = obstacleSpawnInterval;
 
-			createObject(new Barrier());
+			let barrier = new Barrier();
+			createObject(barrier);
+			addObstacle(barrier)
 		}
+
+		// Check passed obstacles
+		try {
+			this.checkPassedObstacles();
+		} catch (e) {
+			console.error(e);
+		}
+	}
+
+	checkPassedObstacles() {
+		const playerPositionX = this.playerMesh.position.x;
+
+        // Iterate through all obstacles
+        for (let obstacle of getAllObstacles()) {
+			console.log(obstacle);
+            if (obstacle.location > playerPositionX && !this.passedObstacles.has(obstacle)) {
+                addScore(1);
+				this.passedObstacles.add(obstacle);
+            }
+        }
 	}
 
 	endGame() {
@@ -132,3 +164,5 @@ class Player extends GameObject {
 		});
 	}
 }
+
+export { Player };

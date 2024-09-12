@@ -13,3 +13,5 @@ class GameObject {
 
 	update(deltaTime) {}
 }
+
+export { GameObject };

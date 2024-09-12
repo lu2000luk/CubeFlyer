@@ -1,5 +1,8 @@
 var obstacleSpeed = 1.5; // Changing this will impact how quickly obstacles in the game move.
 var gapSize = 3; // This determines the size of the gap to create between the floor and ceiling.
+import { GameObject } from './game-object.js';
+import { getAllObstacles, addObstacle, removeObstacle, scene } from './game.js';
+import { gameHeight } from './scene.js';
 
 class Barrier extends GameObject {
 	constructor() {
@@ -27,6 +30,7 @@ class Barrier extends GameObject {
 		// Remember when destroying an object to remove all meshes it creates from the scene!
 		scene.removeMesh(this.ceilingBox);
 		scene.removeMesh(this.floorBox);
+		removeObstacle(this);
 	}
 
 	update(deltaTime) {
@@ -63,3 +67,5 @@ class Barrier extends GameObject {
 		return false;
 	}
 }
+
+export { Barrier };

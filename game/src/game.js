@@ -1,4 +1,21 @@
-//import { createScene } from 'scene.js';
+let obstacles = [];
+
+function getAllObstacles() {
+	return obstacles;
+}
+
+function addObstacle(obstacle) {
+	obstacles.push(obstacle);
+}
+
+function removeObstacle(obstacle) {
+	const index = obstacles.indexOf(obstacle);
+	if (index > -1) {
+		obstacles.splice(index, 1);
+	}
+}
+
+import { createScene, updateGame } from './scene.js';
 
 const canvas = document.getElementById("renderCanvas"); // Get the canvas element
 const engine = new BABYLON.Engine(canvas, true); // Generate the BABYLON 3D engine
@@ -18,3 +35,5 @@ scene.registerBeforeRender(function () {
 window.addEventListener("resize", function () {
 	engine.resize();
 });
+
+export { scene, engine, canvas, addObstacle, removeObstacle, getAllObstacles };

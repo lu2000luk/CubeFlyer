@@ -2,6 +2,10 @@ const gameHeight = 5; // Defines the height of the floor and ceiling in the game
 
 var camera;
 
+import { createHud } from './hud.js';
+import { engine, canvas } from './game.js';
+import { updateGameState } from './state-manager.js';
+
 var createScene = function () {
 	// This creates a basic Babylon Scene object (non-mesh)
 	var scene = new BABYLON.Scene(engine);
@@ -35,3 +39,5 @@ var createScene = function () {
 var updateGame = function () {
 	updateGameState();
 };
+
+export { createScene, updateGame, gameHeight };

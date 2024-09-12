@@ -1,3 +1,9 @@
+import { GameObject } from './game-object.js';
+import { greetings } from './constants.js';
+import { Player } from './player.js';
+import { createObject } from './state-manager.js';
+import { scene } from './game.js';
+
 var gamepadManager = new BABYLON.GamepadManager();
 
 var deviceSourceManager;
@@ -134,3 +140,4 @@ class MainMenu extends GameObject {
 var mainMenu = new MainMenu();
 createObject(mainMenu);
 mainMenu.visible = true;
+export { mainMenu };

@@ -1,3 +1,12 @@
+# Edits i have made to the game:
+- Complete codebase moved to ESModules
+- Made the cube a spike
+- Added janky spike rotation
+- Added more bugs (probably)
+- Made some new greetings
+- Made the score system (No its not based on time even tho it looks like it does)
+
+
 # The Flying Cube Game! 🟥💨
 
 Hi!

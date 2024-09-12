@@ -2,6 +2,9 @@ var currentScreen; // enum to track game state (main menu, playing)
 var newGameObjects = []; // collection of new game objects to be created at end of frame
 var currentGameObjects = []; // collection of all game objects in the scene
 
+import { GameObject } from './game-object.js';
+import { scene } from './game.js';
+
 var createObject = function (gameObject) {
 	newGameObjects.push(gameObject);
 };
@@ -56,3 +59,5 @@ var updateGameState = function () {
 	// Reset create/destroy sets
 	newGameObjects = [];
 };
+
+export { currentScreen, createObject, destroyObject, destroyMatchingObjects, testMatchingObjects, updateGameState };
