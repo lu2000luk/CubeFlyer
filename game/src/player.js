@@ -7,6 +7,10 @@ const obstacleSpawnInterval = 3.5;
 class Player extends GameObject {
 	constructor() {
 		super();
+		this.trailMeshes = [];
+        this.trailLength = 10; // Adjust the length of the trail as needed
+        this.trailInterval = 0.1; // Time interval between trail segments
+        this.trailTimer = 0;
 	}
 
 	init() {
@@ -15,12 +19,11 @@ class Player extends GameObject {
 		this.velocity = new BABYLON.Vector3(0, 0);
 		this.setupInputs();
 
-		// Create the player object - a 1 unit square cube
-		const boxOptions = { width: 1, height: 1, depth: 1 };
-		this.playerMesh = BABYLON.MeshBuilder.CreateBox("bird", boxOptions, scene);
-		this.playerMaterial = new BABYLON.StandardMaterial("Player Material", scene);
-		this.playerMesh.material = this.playerMaterial;
-		this.playerMesh.material.diffuseColor = BABYLON.Color3.White();
+		const cylinderOptions = { diameterTop: 0, diameterBottom: 1, height: 1, tessellation: 24 };
+        this.playerMesh = BABYLON.MeshBuilder.CreateCylinder("arrow", cylinderOptions, scene);
+        this.playerMaterial = new BABYLON.StandardMaterial("Player Material", scene);
+        this.playerMesh.material = this.playerMaterial;
+        this.playerMesh.material.diffuseColor = BABYLON.Color3.White();
 	}
 
 	onDestroy() {
@@ -35,6 +38,13 @@ class Player extends GameObject {
 		if (this.testGameOver()) {
 			this.endGame();
 		}
+
+		// Rotate the player based on y velocity
+		const maxRotation = Math.PI / 2; // 90 degrees in radians
+		const rotationSpeed = 0.1; // Adjust the rotation speed as needed
+
+		const rotationAngle = Math.min(Math.max(this.velocity.y * rotationSpeed, -maxRotation), maxRotation) - 45;
+		this.playerMesh.rotation.z = rotationAngle;
 
 		// To simplify game code the Player handles spawning obstacles (this makes it easier to track for collisions without writing a full handler)
 		// A side effect of this is that creating or destroying the Player can pause or start the game.
@@ -71,7 +81,11 @@ class Player extends GameObject {
 	}
 
 	onPlayerFlight() {
-		this.velocity.y += flightForce;
+		const targetVelocity = flightForce; // Set the desired target velocity
+		const interpolationSpeed = 0.5; // Adjust the interpolation speed as needed
+
+		// Interpolate the velocity towards the target velocity
+		this.velocity.y = BABYLON.Scalar.Lerp(this.velocity.y, targetVelocity, interpolationSpeed);
 	}
 
 	capVelocity(cap) {
