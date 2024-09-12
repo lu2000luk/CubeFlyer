@@ -97,7 +97,7 @@ class MainMenu extends GameObject {
 		// Create a Text Block that can display the current score
 		this.welcomeText = new BABYLON.GUI.TextBlock();
 		this.welcomeText.text = "Flying Spike? Game!";
-		this.welcomeText.fontFamily = "Impact";
+		this.welcomeText.fontFamily = "'Protest Guerrilla', sans-serif";
 		this.welcomeText.color = "white";
 		this.welcomeText.fontSize = 72;
 		this.welcomeText.verticalAlignment = BABYLON.GUI.TextBlock.VERTICAL_ALIGNMENT_TOP;
@@ -107,7 +107,7 @@ class MainMenu extends GameObject {
 
 		this.greetingText = new BABYLON.GUI.TextBlock();
 		this.greetingText.text = greeting;
-		this.greetingText.fontFamily = "Impact";
+		this.greetingText.fontFamily = "'Protest Guerrilla', sans-serif";
 		this.greetingText.color = "white";
 		this.greetingText.fontSize = 28;
 		this.greetingText.verticalAlignment = BABYLON.GUI.TextBlock.VERTICAL_ALIGNMENT_TOP;
@@ -116,8 +116,8 @@ class MainMenu extends GameObject {
 		this.greetingText.height = 0.7;
 
 		this.instructionsText = new BABYLON.GUI.TextBlock();
-		this.instructionsText.text = "press any key to play";
-		this.instructionsText.fontFamily = "Impact";
+		this.instructionsText.text = "Press any key to play";
+		this.instructionsText.fontFamily = "'Protest Guerrilla', sans-serif";
 		this.instructionsText.color = "#aafffa";
 		this.instructionsText.fontSize = 32;
 		this.instructionsText.verticalAlignment = BABYLON.GUI.TextBlock.VERTICAL_ALIGNMENT_TOP;
