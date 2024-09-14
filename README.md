@@ -9,7 +9,7 @@
 - Changed score font from Comic Sans to Roboto (Google Fonts)
 - Made the barriers have a red "breath" effect
 
-# The Flying Cube Game! 🟥💨
+# The Flying ~~Cube~~ Spike Game! 🔺💨
 
 Hi!
 
@@ -36,4 +36,5 @@ We've also provided a file that should support launching from VS Code that will 
 This project is intended as a sandbox for you to learn about GitHub and contributing to Open Source.
 
 ## Acknowledgements
-All the code in this repo was written by [Sam Wronski](https://github.com/runewake2).
+~~All~~ A BIG part of the code in this repo was written by [Sam Wronski](https://github.com/runewake2).
+I (lu2000luk) also wrote some code! And Github Copilot also did...
