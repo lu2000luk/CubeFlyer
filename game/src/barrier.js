@@ -70,27 +70,7 @@ class Barrier extends GameObject {
 	}
 
 	startFlashingEffect() {
-		const animation = new BABYLON.Animation(
-			"flashAnimation",
-			"visibility",
-			30,
-			BABYLON.Animation.ANIMATIONTYPE_FLOAT,
-			BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE
-		);
-	
-		const keys = [
-			{ frame: 0, value: 1 },
-			{ frame: 15, value: 0 },
-			{ frame: 30, value: 1 }
-		];
-	
-		animation.setKeys(keys);
-	
-		this.ceilingBox.animations = [animation];
-		this.floorBox.animations = [animation];
-	
-		scene.beginAnimation(this.ceilingBox, 0, 30, true);
-		scene.beginAnimation(this.floorBox, 0, 30, true);
+		// This code was not good and i dont have the time to remove it fully...
 	}
 }
 
