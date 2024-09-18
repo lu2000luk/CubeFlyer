@@ -1,7 +1,7 @@
-var obstacleSpeed = 1.5; // Changing this will impact how quickly obstacles in the game move.
+var obstacleSpeed = 2; // Changing this will impact how quickly obstacles in the game move.
 var gapSize = 3; // This determines the size of the gap to create between the floor and ceiling.
 import { GameObject } from './game-object.js';
-import { getAllObstacles, addObstacle, removeObstacle, scene } from './game.js';
+import { getAllObstacles, addObstacle, removeObstacle, scene, difficulty } from './game.js';
 import { gameHeight } from './scene.js';
 import { destroyObject } from './state-manager.js';
 

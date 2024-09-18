@@ -22,6 +22,23 @@
 				height: 100%;
 				touch-action: none;
 			}
+
+			#alertBox {
+				position: absolute;
+				top: 20px;
+				left: 1%;
+				display: flex;
+				color: white;
+				padding: 2px;
+				font-family: 'Roboto', sans-serif;
+				z-index: 10000 !important;
+				flex-direction: column;
+    			flex-wrap: nowrap;
+			}
+
+			#alertBox p {
+				margin: 0;
+			}
 		</style>
 
 		<script src="https://cdn.babylonjs.com/babylon.js"></script>
@@ -31,6 +48,7 @@
 	</head>
 
 	<body>
+		<div id="alertBox"></div>
 		<canvas id="renderCanvas" touch-action="none"></canvas>
 		<!-- touch-action="none" for best results from PEP -->
 
@@ -45,5 +63,6 @@
 		<script src="src/hud.js" type="module"></script>
 		<script src="src/scene.js" type="module"></script>
 		<script src="src/game.js" type="module"></script>
+		<script src="src/alert.js" type="module"></script>
 	</body>
 </html>

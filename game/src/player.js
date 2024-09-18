@@ -1,7 +1,7 @@
 var gamepadManager = new BABYLON.GamepadManager();
 import { getAllObstacles, addObstacle, removeObstacle, difficulty } from './game.js';
 import { GameObject } from './game-object.js';
-import { scene, resetDifficulty } from './game.js';
+import { scene, resetDifficulty, increaseDifficulty } from './game.js';
 import { createObject, destroyObject, destroyMatchingObjects, testMatchingObjects } from './state-manager.js';
 import { Barrier } from './barrier.js';
 import { gravity, flightForce } from './constants.js';
@@ -9,9 +9,16 @@ import { gameHeight } from './scene.js';
 import { mainMenu } from './mainmenu.js';
 import { addScore, resetScore } from './hud.js';
 
+import { sendAlert } from './alert.js';
+
+const logs = true;
+
 var deviceSourceManager;
 
-const obstacleSpawnInterval = 3.5 / Math.max(Math.min(difficulty / 10, 1), 8);
+const minSpawnInterval = 1.5; // Minimum spawn interval to ensure the game is playable
+const maxSpawnInterval = 5.0; // Maximum spawn interval for initial difficulty
+
+let obstacleSpawnInterval = 5;
 
 class Player extends GameObject {
 	constructor() {
@@ -35,6 +42,11 @@ class Player extends GameObject {
 		this.playerMaterial = new BABYLON.StandardMaterial("Player Material", scene);
 		this.playerMesh.material = this.playerMaterial;
 		this.playerMesh.material.diffuseColor = BABYLON.Color3.White();
+
+		this.lastSpeed = 0;
+		this.lastObstacleSpawn = 0;
+		this.lastDifficulty = 0;
+
 	}
 
 	onDestroy() {
@@ -42,6 +54,8 @@ class Player extends GameObject {
 	}
 
 	update(deltaTime) {
+		obstacleSpawnInterval = Math.max(minSpawnInterval, maxSpawnInterval - (difficulty / 10));
+
 		// Update the players physics:
 		this.velocity.y += gravity.y * deltaTime;
 		this.capVelocity(20);
@@ -74,6 +88,36 @@ class Player extends GameObject {
 		} catch (e) {
 			console.error(e);
 		}
+
+		if (Math.floor(this.lastObstacleSpawn) !== Math.floor(obstacleSpawnInterval)) {
+			function mapSpawningRate(s) {
+				if (s > 4) return "Easy";
+				if (s > 3) return "Medium";
+				if (s > 2) return "Hard";
+				return "Insane";
+			}
+			this.alertDifficultyChanges("Spawning rate set to " + mapSpawningRate(obstacleSpawnInterval));
+			this.lastObstacleSpawn = obstacleSpawnInterval;
+		}
+
+		if (Math.floor(this.lastDifficulty) !== Math.floor(difficulty / 10)) {
+			this.alertDifficultyChanges("Difficulty changed to " + Math.floor(difficulty / 10));
+			this.lastDifficulty = difficulty / 10;
+		}
+	}
+
+	alertDifficultyChanges(text) {
+		sendAlert(text);
+
+		if (logs) {
+			console.log(text);
+			console.table({
+				"Difficulty": difficulty,
+				"Obstacle Spawn Interval": obstacleSpawnInterval,
+				"Log ID": Math.floor(Math.random() * 1000000),
+				"Flight Force": Math.min(flightForce + (difficulty / 10), 10)
+			});
+		}
 	}
 
 	checkPassedObstacles() {
@@ -81,10 +125,10 @@ class Player extends GameObject {
 
         // Iterate through all obstacles
         for (let obstacle of getAllObstacles()) {
-			console.log(obstacle);
             if (obstacle.location > playerPositionX && !this.passedObstacles.has(obstacle)) {
                 addScore(1);
 				this.passedObstacles.add(obstacle);
+				increaseDifficulty(0.05);
             }
         }
 	}
@@ -114,7 +158,8 @@ class Player extends GameObject {
 	}
 
 	onPlayerFlight() {
-		const targetVelocity = flightForce; // Set the desired target velocity
+		const maxFlightForce = 10; // Maximum flight force to ensure the game is playable
+		const targetVelocity = Math.min(flightForce + (difficulty / 10), maxFlightForce); // Increment with difficulty but cap it
 		const interpolationSpeed = 0.5; // Adjust the interpolation speed as needed
 
 		// Interpolate the velocity towards the target velocity
