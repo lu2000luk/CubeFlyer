@@ -3,10 +3,12 @@ var gapSize = 3; // This determines the size of the gap to create between the fl
 import { GameObject } from './game-object.js';
 import { getAllObstacles, addObstacle, removeObstacle, scene } from './game.js';
 import { gameHeight } from './scene.js';
+import { destroyObject } from './state-manager.js';
 
 class Barrier extends GameObject {
 	constructor() {
 		super();
+		this.fadeOutRate = 0.01;
 	}
 
 	init() {
@@ -42,8 +44,19 @@ class Barrier extends GameObject {
 		this.ceilingBox.position.x = this.location;
 		this.floorBox.position.x = this.location;
 
-		if (this.location < -25) {
+		if (this.location < -25 && this.ceilingBox.material.alpha > 0) {
 			destroyObject(this);
+		}
+
+		if (this.location < 0) {
+			this.ceilingBox.material.alpha -= this.fadeOutRate;
+			this.floorBox.material.alpha -= this.fadeOutRate;
+
+			if (this.ceilingBox.material.alpha <= 0) {
+				this.ceilingBox.material.alpha = 0;
+				this.floorBox.material.alpha = 0;
+				destroyObject(this);
+			}
 		}
 	}
 

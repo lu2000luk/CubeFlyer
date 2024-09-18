@@ -1,7 +1,7 @@
 var gamepadManager = new BABYLON.GamepadManager();
-import { getAllObstacles, addObstacle, removeObstacle } from './game.js';
+import { getAllObstacles, addObstacle, removeObstacle, difficulty } from './game.js';
 import { GameObject } from './game-object.js';
-import { scene } from './game.js';
+import { scene, resetDifficulty } from './game.js';
 import { createObject, destroyObject, destroyMatchingObjects, testMatchingObjects } from './state-manager.js';
 import { Barrier } from './barrier.js';
 import { gravity, flightForce } from './constants.js';
@@ -11,7 +11,7 @@ import { addScore, resetScore } from './hud.js';
 
 var deviceSourceManager;
 
-const obstacleSpawnInterval = 3.5;
+const obstacleSpawnInterval = 3.5 / Math.max(Math.min(difficulty / 10, 1), 8);
 
 class Player extends GameObject {
 	constructor() {
@@ -28,6 +28,7 @@ class Player extends GameObject {
 		// A Vector2 is a 2 dimensional vector with X and Y dimension - track velocity with this.
 		this.velocity = new BABYLON.Vector3(0, 0);
 		this.setupInputs();
+		resetDifficulty();
 
 		const cylinderOptions = { diameterTop: 0, diameterBottom: 1, height: 1, tessellation: 24 };
 		this.playerMesh = BABYLON.MeshBuilder.CreateCylinder("arrow", cylinderOptions, scene);

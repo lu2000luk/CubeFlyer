@@ -7,7 +7,8 @@
 - Made the score system (No its not based on time even tho it looks like it does)
 - Changed main menu font from Impact to Protest Guerrilla (Google Fonts)
 - Changed score font from Comic Sans to Roboto (Google Fonts)
-- Made the barriers have a red "breath" effect
+- Added fade out to the barriers
+- Added difficulty!
 
 # The Flying ~~Cube~~ Spike Game! 🔺💨
 

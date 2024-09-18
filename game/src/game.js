@@ -1,5 +1,7 @@
 let obstacles = [];
 
+let difficulty = 1;
+
 function getAllObstacles() {
 	return obstacles;
 }
@@ -14,6 +16,18 @@ function removeObstacle(obstacle) {
 		obstacles.splice(index, 1);
 	}
 }
+
+function increaseDifficulty(amount = 0.5) {
+	difficulty += amount;
+}
+
+function resetDifficulty() {
+	difficulty = 1;
+}
+
+setInterval(() => {
+	increaseDifficulty();
+}, 500);
 
 import { createScene, updateGame } from './scene.js';
 
@@ -36,4 +50,4 @@ window.addEventListener("resize", function () {
 	engine.resize();
 });
 
-export { scene, engine, canvas, addObstacle, removeObstacle, getAllObstacles };
+export { scene, engine, canvas, addObstacle, removeObstacle, getAllObstacles, difficulty, increaseDifficulty, resetDifficulty };
