@@ -39,20 +39,134 @@
 			#alertBox p {
 				margin: 0;
 			}
+
+			.shop {
+				position: absolute;
+				top: 20px;
+				left: 1%;
+				display: grid;
+				color: white;
+				padding: 18px;
+				font-family: 'Roboto', sans-serif;
+				z-index: 10000 !important;
+				flex-wrap: wrap;
+				width: 40%;
+				height: 45%;
+				overflow-y: scroll;
+				gap: 12px;
+				grid-template-columns: auto auto auto;
+				background-color: antiquewhite;
+				border-radius: 5px;
+
+				z-index: 10 !important;
+			}
+			
+			.shop::-webkit-scrollbar {
+				display: none;
+			}
+
+			.shopitem {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+				padding: 5px;
+				background-color: #333;
+				border-radius: 5px;
+				cursor: pointer;
+			}
+
+			.shopitem_icon {
+				font-size: 30px;
+			}
+
+			.balance {
+				grid-column: 1 / span 3;
+				text-align: center;
+				font-size: 20px;
+				color: #333;
+			}
+
+			.item_owned_justnow > .shopitem_price {
+				display: none;
+			}
+
+			.item_owned > .shopitem_price {
+				display: none;
+			}
 		</style>
 
 		<script src="https://cdn.babylonjs.com/babylon.js"></script>
 		<script src="https://cdn.babylonjs.com/gui/babylon.gui.min.js"></script>
 		<script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
 		<script src="https://code.jquery.com/pep/0.4.3/pep.js"></script>
+		<script src="https://cdn.tailwindcss.com"></script>
 	</head>
 
 	<body>
 		<div id="alertBox"></div>
+		<div class="shop" id="shop"></div>
 		<canvas id="renderCanvas" touch-action="none"></canvas>
 		<!-- touch-action="none" for best results from PEP -->
 
 		<!--  <script type="module" src="main.js"></script>  -->
+
+		<script type="module">
+			let didAddEvents = false;
+
+			import { sendAlert } from './src/alert.js';
+			import { isShopOpen, closeShop, addShopEventListener, items, runItem } from './src/shop.js';
+			import { getCoins } from "./src/pointsHandler.js";
+			import { gaming } from './src/mainmenu.js';
+			import { gsap } from "./src/gsap/index.js";
+
+			const shopItemUI = "<div class='shopitem %outerownedclass% hover:shadow-xl transition-all' id='%itemid%'><p class='shopitem_icon'>%itemicon%</p><p class='shopitem_title'>%itemtitle%</p><span class='%ownedclass% shopitem_price'>%itemprice%</span></div>";
+
+			let fullShopUI = "<p class='balance'>You have <span id='coins'>[loading]</span> coins</p>";
+
+			items.forEach(item => {
+				let itemUI = shopItemUI;
+				itemUI = itemUI.replace('%itemicon%', item.icon);
+				itemUI = itemUI.replace('%itemtitle%', item.name);
+				itemUI = itemUI.replace('%itemprice%', item.price + " coins");
+				itemUI = itemUI.replace('%ownedclass%', localStorage.getItem(`purchased_${item.name}`) ? 'price_owned' : 'price_notowned');
+				itemUI = itemUI.replace('%outerownedclass%', localStorage.getItem(`purchased_${item.name}`) ? 'item_owned' : 'item_notowned');
+				itemUI = itemUI.replace('%itemid%', btoa(item.name)+'-shopitem');
+				fullShopUI += itemUI;
+			});
+
+			document.getElementById('shop').innerHTML = fullShopUI;
+			document.getElementById('shop').style.display = 'none';
+
+			addShopEventListener(() => {
+				if (!didAddEvents) {
+					didAddEvents = true;
+					items.forEach(item => {
+						document.getElementById(btoa(item.name)+'-shopitem').addEventListener('click', () => {
+							if (runItem(item.name)) {
+								document.getElementById('coins').innerText = getCoins();
+								document.getElementById(btoa(item.name)+'-shopitem').classList.add('item_owned_justnow');
+							} else {
+								gsap.to(document.getElementById(btoa(item.name)+'-shopitem'), { duration: 0.25, scale: 1.2 });
+								setTimeout(() => {
+									gsap.to(document.getElementById(btoa(item.name)+'-shopitem'), { duration: 0.25, scale: 1 });
+								}, 250);
+							}
+						});
+					});
+				}
+
+				document.getElementById('shop').style.display = 'grid';
+				document.getElementById('coins').innerText = getCoins();
+			});
+
+			document.addEventListener('keydown', (e) => {
+				if (e.key === 'Escape' && isShopOpen()) {
+					closeShop();
+					document.getElementById('shop').style.display = 'none';
+				}
+			});
+		</script>
 
 		<script src="src/constants.js" type="module"></script>
 		<script src="src/state-manager.js" type="module"></script>

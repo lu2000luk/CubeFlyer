@@ -4,7 +4,11 @@ import { Player } from './player.js';
 import { createObject } from './state-manager.js';
 import { scene } from './game.js';
 
+import { openShop } from './shop.js';
+
 var gamepadManager = new BABYLON.GamepadManager();
+
+var gaming = false;
 
 var deviceSourceManager;
 
@@ -38,6 +42,7 @@ class MainMenu extends GameObject {
 		if (this.visible) {
 			this.visible = false;
 			createObject(new Player());
+			gaming = true;
 		}
 	}
 
@@ -65,7 +70,17 @@ class MainMenu extends GameObject {
 			// If Keyboard, add an Observer to change text
 			else if (deviceSource.deviceType === BABYLON.DeviceType.Keyboard) {
 				deviceSource.onInputChangedObservable.add((eventData) => {
-					if (eventData.type === "keydown" && eventData.key === " ") {
+					if (eventData.type === "keydown") {
+						if (eventData.key === "b") {
+							if (gaming) {
+								return;
+							}
+							openShop();
+							return;
+						}
+
+						console.log(eventData)
+
 						this.onStartGame();
 					}
 				});
@@ -92,6 +107,8 @@ class MainMenu extends GameObject {
 	}
 
 	showUI() {
+		gaming = false;
+
 		let greeting = this.getGreeting();
 
 		// Create a Text Block that can display the current score
@@ -116,7 +133,7 @@ class MainMenu extends GameObject {
 		this.greetingText.height = 0.7;
 
 		this.instructionsText = new BABYLON.GUI.TextBlock();
-		this.instructionsText.text = "Press any key to play";
+		this.instructionsText.text = "Press any key to play or press B to open shop.";
 		this.instructionsText.fontFamily = "'Protest Guerrilla', sans-serif";
 		this.instructionsText.color = "#aafffa";
 		this.instructionsText.fontSize = 32;
@@ -140,4 +157,4 @@ class MainMenu extends GameObject {
 var mainMenu = new MainMenu();
 createObject(mainMenu);
 mainMenu.visible = true;
-export { mainMenu };
+export { mainMenu, gaming };

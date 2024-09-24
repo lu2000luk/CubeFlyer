@@ -1,5 +1,4 @@
 let obstacles = [];
-
 let difficulty = 1;
 
 function getAllObstacles() {
