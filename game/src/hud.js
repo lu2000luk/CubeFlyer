@@ -1,6 +1,8 @@
 var score = 0;
 var scoreText;
 
+import { addCoins } from './pointsHandler.js';
+
 var createHud = function () {
 	var hudTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
 
@@ -32,6 +34,7 @@ var resetScore = function () {
 var addScore = function (points) {
 	score += points;
 	updateScoreText();
+	addCoins(points);
 };
 
 export { createHud, resetScore, addScore };

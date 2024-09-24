@@ -5,6 +5,8 @@ import { getAllObstacles, addObstacle, removeObstacle, scene, difficulty } from 
 import { gameHeight } from './scene.js';
 import { destroyObject } from './state-manager.js';
 
+import { currentObstacleColor, roundedObstacles } from './shop.js';
+
 class Barrier extends GameObject {
 	constructor() {
 		super();
@@ -18,11 +20,39 @@ class Barrier extends GameObject {
 		// Creates 2 boxes which will be used for the top and bottom obstacles,
 		// the floor will obscure the height of the object so we don't need to modify this much.
 		const boxOptions = { width: 1, height: 10, depth: 1 };
-		this.ceilingBox = BABYLON.MeshBuilder.CreateBox("ceilingObstacle", boxOptions, scene);
-		this.floorBox = BABYLON.MeshBuilder.CreateBox("floorObstacle", boxOptions, scene);
+		if (roundedObstacles) {
+			this.ceilingBox = BABYLON.MeshBuilder.CreateCylinder("ceilingObstacle", { diameter: 1, height: 10 }, scene);
+			this.floorBox = BABYLON.MeshBuilder.CreateCylinder("floorObstacle", { diameter: 1, height: 10 }, scene);
+		} else {
+			this.ceilingBox = BABYLON.MeshBuilder.CreateBox("ceilingObstacle", boxOptions, scene);
+			this.floorBox = BABYLON.MeshBuilder.CreateBox("floorObstacle", boxOptions, scene);
+		}
 		// Materials impact how an object is rendered like color, texture etc.
 		let barrierMaterial = new BABYLON.StandardMaterial("Barrier Material", scene);
-		barrierMaterial.diffuseColor = BABYLON.Color3.Red(); // Change color to red
+		switch (currentObstacleColor) {
+			case "green":
+				barrierMaterial.diffuseColor = BABYLON.Color3.Green();
+				break;
+			case "yellow":
+				barrierMaterial.diffuseColor = BABYLON.Color3.Yellow();
+				break;
+			case "orange":
+				barrierMaterial.diffuseColor = BABYLON.Color3.Orange();
+				break;
+			case "black":
+				barrierMaterial.diffuseColor = BABYLON.Color3.Black();
+				break;
+			case "white":
+				barrierMaterial.diffuseColor = BABYLON.Color3.White();
+				break;
+			case "blue":
+				barrierMaterial.diffuseColor = BABYLON.Color3.Blue();
+				break;
+			default:
+				barrierMaterial.diffuseColor = BABYLON.Color3.Red();
+				break;
+		}
+
 		this.ceilingBox.material = barrierMaterial;
 		this.floorBox.material = barrierMaterial;
 		this.assignLocations();

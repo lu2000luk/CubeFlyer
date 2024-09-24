@@ -1,6 +1,12 @@
 import { gsap } from "./gsap/index.js";
+import { gaming } from "./mainmenu.js";
 
-function sendAlert(text = "Error: check console for more information") {
+function sendAlert(text = "Error: check console for more information",  bypass_gamestate = false) {
+
+    if (!bypass_gamestate && gaming) {
+        return;
+    }
+
     let alertBox = document.getElementById("alertBox");
     let alert = document.createElement("p");
     alert.className = "alert";
@@ -15,6 +21,8 @@ function sendAlert(text = "Error: check console for more information") {
     setTimeout(() => {
         alertBox.removeChild(alert);
     }, 4500);
+
+    console.log(text);
 }
 
 export { sendAlert };

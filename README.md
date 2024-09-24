@@ -9,6 +9,9 @@
 - Changed score font from Comic Sans to Roboto (Google Fonts)
 - Added fade out to the barriers
 - Added difficulty!
+- Installed GSAP
+- Added alert system
+- Added difficulty alerts
 
 # The Flying ~~Cube~~ Spike Game! 🔺💨
 

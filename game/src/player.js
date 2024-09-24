@@ -11,6 +11,8 @@ import { addScore, resetScore } from './hud.js';
 
 import { sendAlert } from './alert.js';
 
+import { currentSpikeColor } from './shop.js';
+
 const logs = true;
 
 var deviceSourceManager;
@@ -41,7 +43,39 @@ class Player extends GameObject {
 		this.playerMesh = BABYLON.MeshBuilder.CreateCylinder("arrow", cylinderOptions, scene);
 		this.playerMaterial = new BABYLON.StandardMaterial("Player Material", scene);
 		this.playerMesh.material = this.playerMaterial;
-		this.playerMesh.material.diffuseColor = BABYLON.Color3.White();
+
+		switch (currentSpikeColor) {
+			case "green":
+				this.playerMesh.material.diffuseColor = BABYLON.Color3.Green();
+				break;
+			case "yellow":
+				this.playerMesh.material.diffuseColor = BABYLON.Color3.Yellow();
+				break;
+			case "pink":
+				this.playerMesh.material.diffuseColor = BABYLON.Color3.Pink();
+				break;
+			case "orange":
+				this.playerMesh.material.diffuseColor = BABYLON.Color3.Orange();
+				break;
+			case "black":
+				this.playerMesh.material.diffuseColor = BABYLON.Color3.Black();
+				break;
+			case "white":
+				this.playerMesh.material.diffuseColor = BABYLON.Color3.White();
+				break;
+			case "purple":
+				this.playerMesh.material.diffuseColor = BABYLON.Color3.Purple();
+				break;
+			case "blue":
+				this.playerMesh.material.diffuseColor = BABYLON.Color3.Blue();
+				break;
+			case "red":
+				this.playerMesh.material.diffuseColor = BABYLON.Color3.Red();
+				break;
+			default:
+				this.playerMesh.material.diffuseColor = BABYLON.Color3.White();
+				break;
+		}
 
 		this.lastSpeed = 0;
 		this.lastObstacleSpawn = 0;
