@@ -12,6 +12,10 @@
 - Installed GSAP
 - Added alert system
 - Added difficulty alerts
+- Added shop
+
+
+Made for [this challenge](https://github.com/orgs/community/discussions/138419)
 
 # The Flying ~~Cube~~ Spike Game! 🔺💨
 
